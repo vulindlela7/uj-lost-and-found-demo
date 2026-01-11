@@ -1,0 +1,7 @@
+/* Secondary theme: Eswatini style (example) */
+:root {
+  --primary: #006644;
+  --accent: #ffd100;
+}
+.site-header { background: var(--primary); color: white; }
+button { background: var(--accent); }

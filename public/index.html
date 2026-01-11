@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>UJ Lost & Found Demo</title>
+  <link rel="stylesheet" href="/css/uj.css">
+</head>
+<body>
+  <header class="site-header">
+    <img id="logo" src="/assets/uj-logo.png" alt="UJ logo" />
+    <h1 id="site-title">UJ Lost & Found</h1>
+  </header>
+
+  <main>
+    <section id="new-item">
+      <h2>Report Found Item</h2>
+      <form id="item-form">
+        <label>Title: <input name="title" required></label><br>
+        <label>Description: <textarea name="description"></textarea></label><br>
+        <label>Location: <input name="location"></input></label><br>
+        <label>Found Date: <input type="date" name="found_date"></label><br>
+        <label>Your Name: <input name="reporter_name"></input></label><br>
+        <label>Contact: <input name="reporter_contact"></input></label><br>
+        <button type="submit">Submit</button>
+      </form>
+    </section>
+
+    <section id="items">
+      <h2>Reported Items</h2>
+      <ul id="items-list"></ul>
+    </section>
+  </main>
+
+  <script>
+    async function loadConfig() {
+      const res = await fetch('/site-config.json');
+      return res.json();
+    }
+
+    async function refreshItems() {
+      const res = await fetch('/api/items');
+      const items = await res.json();
+      const list = document.getElementById('items-list');
+      list.innerHTML = items.map(i => `<li><strong>${i.title}</strong> (${i.status}) - ${i.location || 'Unknown'}<br>${i.description || ''}</li>`).join('');
+    }
+
+    document.getElementById('item-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const data = Object.fromEntries(new FormData(form).entries());
+      await fetch('/api/items', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+      form.reset();
+      refreshItems();
+    });
+
+    (async () => {
+      const cfg = await loadConfig();
+      document.getElementById('site-title').textContent = cfg.displayName || 'Lost & Found';
+      document.getElementById('logo').src = cfg.logo || '/assets/uj-logo.png';
+      refreshItems();
+    })();
+  </script>
+</body>
+</html>

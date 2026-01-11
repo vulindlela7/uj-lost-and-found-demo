@@ -1,0 +1,12 @@
+{
+  "id": "uj-lost-and-found",
+  "displayName": "University of Johannesburg Lost & Found",
+  "shortName": "UJ",
+  "contactEmail": "lostandfound@uj.ac.za",
+  "primaryColor": "#003A70",
+  "secondaryColor": "#E31C37",
+  "logo": "/assets/uj-logo.png",
+  "theme": "uj",
+  "campus": "Auckland Park",
+  "notes": "Demo configuration for UJ. This can be adjusted for different campuses."
+}
